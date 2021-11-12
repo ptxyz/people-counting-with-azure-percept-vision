@@ -34,19 +34,22 @@ async def main():
 
             inference_list = json.loads(input_message.data)['NEURAL_NETWORK']
             print(f'inference list: {inference_list}')
-            count_ppl = 0 
-            
+            count_ppl = 0
+            count_obs = 0
+
             if isinstance(inference_list, list) and inference_list:
                 now = datetime.fromtimestamp(int(inference_list[0]['timestamp'][:-9]))
-                
-                count_ppl = len(inference_list)
+                count_ppl = len([x for x in inference_list if x["label"] == "person"])
+                count_obs = len([x for x in inference_list if x["label"] == "obstruction"])
             
             print(f'People_Count: {count_ppl}')
+            print(f'Obstruction_Count: {count_obs}')
             print(f'Date: {now}')
 
             json_data = {
                     'Date': f'{now}', 
-                    'People_Count': count_ppl
+                    'People_Count': count_ppl,
+                    'Obstruction_Count': count_obs
                 }
             
             print("forwarding mesage to output1")
